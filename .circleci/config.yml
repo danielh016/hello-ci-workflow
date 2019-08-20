@@ -41,12 +41,17 @@ jobs:
       # - run: bundle exec rake db:schema:load
 
       # run tests!
+      - run:
+        name: run tests
+        command: |
+          docker run -d -p 3000:3000 hello-ci-workflow; sleep 10
+          curl --retry 10 --retry-delay 5 -v http://localhost:3000
       # - run:
       #     name: run tests
-      #     command: |
-      #       mkdir /tmp/test-results
-      #       TEST_FILES="$(circleci tests glob "spec/**/*_spec.rb" | \
-      #         circleci tests split --split-by=timings)"
+          # command: |
+          #   mkdir /tmp/test-results
+          #   TEST_FILES="$(circleci tests glob "spec/**/*_spec.rb" | \
+          #     circleci tests split --split-by=timings)"
 
       #       bundle exec rspec \
       #         --format progress \
