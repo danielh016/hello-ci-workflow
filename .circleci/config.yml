@@ -30,8 +30,12 @@ jobs:
       - run:
           name: install dependencies
           command: |
-            bundle install --jobs=4 --retry=3 --path vendor/bundle \
-            docker build --tag hello_world .
+            bundle install --jobs=4 --retry=3 --path vendor/bundle
+
+      - run:
+          name: build docker
+          command: |
+            docker build -t hello_world .
 
       - save_cache:
           paths:
