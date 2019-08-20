@@ -46,8 +46,15 @@ jobs:
       - run:
           name: run server
           command: |
-            docker run -d -p 3000:3000 hello_world; timeout 10 \ 
+            docker run -d -p 3000:3000 hello_world \ 
               curl --retry 10 --retry-delay 5 -v http://localhost:3000
+
+      # run tests!
+      # - run:
+      #     name: run server
+      #     command: |
+      #       docker run -d -p 3000:3000 hello_world; timeout 10 \ 
+      #         curl --retry 10 --retry-delay 5 -v http://localhost:3000
 
       # - run:
       #     name: run server
