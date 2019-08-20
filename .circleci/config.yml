@@ -44,7 +44,7 @@ jobs:
       - run:
         name: run server
         command: |
-          docker run -d -p 3000:3000 hello-ci-workflow; sleep 10
+          docker run -d -p 3000:3000 hello_world; sleep 10
 
       - run:
         name: test http request
