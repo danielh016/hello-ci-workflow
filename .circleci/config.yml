@@ -2,9 +2,9 @@
 #
 # Check https://circleci.com/docs/2.0/language-ruby/ for more details
 #
-version: 2
+version: 2.1
 orbs:
-  aws-cli: circleci/aws-cli@0.1.8
+  aws-cli: circleci/aws-cli@0.1.13
   aws-ecr: circleci/aws-ecr@1.1.2
 jobs:
   build:
@@ -57,15 +57,15 @@ jobs:
       - setup_remote_docker
       # - attach_workspace:
       #     at: workspace
-      # - aws-cli/install
+      - aws-cli/install
       # - aws-cli/configure:
       #     aws-access-key-id: "$AWS_ACCESS_KEY_ID"
       #     aws-region: "$AWS_DEFAULT_REGION"
-      - run:
-          name: Install dependencies
-          command: |
-            pip install --upgrade pip
-            pip install awscli==1.11.76
+      # - run:
+      #     name: Install dependencies
+      #     command: |
+      #       pip install --upgrade pip
+      #       pip install awscli==1.11.76
 
       - run:
           command: |
@@ -82,7 +82,7 @@ jobs:
             
 
 workflows:
-  version: 2
+  version: 2.1
   build-deploy:
     jobs:
       - build
