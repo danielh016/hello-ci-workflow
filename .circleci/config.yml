@@ -39,10 +39,10 @@ jobs:
       #       docker run -d -p 3000:3000 hello_world; sleep 10; \
       #         curl --retry 10 --retry-delay 5 -v http://localhost:3000
       
-      # - run:
-      #     name: build docker
-      #     command: |
-      #       docker build -t hello_world .
+      - run:
+          name: build docker
+          command: |
+            docker build -t hello_world .
 
       # - run:
       #     name: run server
@@ -55,21 +55,23 @@ jobs:
       #     command: |
       #       docker run -d -p 3000:3000 hello_world;
 
-      # - run:
-      #     name: "Start Service and Check That it’s Running"
-      #     command: |
-      #       docker run -d --name hello_world hello_world
-      #       docker exec hello_world curl --retry 10 --retry-connrefused http://localhost:3000
+      - run:
+          name: "Start Service and Check That it’s Running"
+          command: |
+            docker run -d --name hello_world hello_world
+            docker ps
+            docker images
+            docker exec hello_world curl --retry 10 --retry-connrefused http://localhost:3000
 
       # - run: |
       #     docker run -d --name hello_world hello_world
       #     docker ps
       #     docker run --network container:hello_world appropriate/curl --retry 10 --retry-connrefused http://localhost:3000
 
-      - run: |
-          docker-compose up -d
-          docker ps
-          docker run --network container:hello_world_app appropriate/curl --retry 10 --retry-connrefused http://localhost:3000
+      # - run: |
+      #     docker-compose up -d
+      #     docker ps
+      #     docker run --network container:hello_world_app appropriate/curl --retry 10 --retry-connrefused http://localhost:3000
 
   # test:
   #   docker:
