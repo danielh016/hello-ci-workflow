@@ -62,7 +62,7 @@ jobs:
             sleep 10;
             docker ps
             docker images
-            docker exec hello_world curl --retry 10 --retry-connrefused http://localhost:3000
+            docker exec hello_world curl --retry 2 --retry-connrefused http://localhost:3000
 
       # - run: |
       #     docker run -d --name hello_world hello_world
