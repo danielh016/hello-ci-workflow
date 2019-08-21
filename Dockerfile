@@ -11,3 +11,5 @@ COPY . .
 
 EXPOSE 3000
 CMD rails server -b 0.0.0.0
+
+ENV HTTP_PROXY "http://127.0.0.1:3000, http://localhost:3000"
