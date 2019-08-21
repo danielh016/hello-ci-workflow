@@ -13,9 +13,6 @@ jobs:
       # CircleCI maintains a library of pre-built images
       # documented at https://circleci.com/docs/2.0/circleci-images/
       # - image: circleci/postgres:9.4
-      - image: owasp/zap2docker-stable
-        name: zap
-        command: zap.sh -daemon -host 0.0.0.0 -port 3000 -config api.disablekey=true -config api.addrs.addr.name=.* -config api.addrs.addr.regex=true
 
     working_directory: ~/repo
 
@@ -70,68 +67,38 @@ jobs:
       #       docker run -d --name hello_world hello_world
       #       docker exec hello_world curl --retry 10 --retry-connrefused http://localhost:3000
 
+      # - run: |
+      #     docker run -d --name hello_world hello_world
+      #     docker ps
+      #     docker run --network container:hello_world appropriate/curl --retry 10 --retry-connrefused http://localhost:3000
+
       - run: |
           docker run -d --name hello_world hello_world
           docker ps
-          
-      # docker run --network container:hello_world appropriate/curl --retry 10 --retry-connrefused http://localhost:3000
 
-      - run:
-          name: Wait For Proxy
-          command: |
-            until nc -z zap 3000
-            do
-              echo "Waiting for ZAP..."
-              sleep 1
-            done
+  test:
+    docker:
+      - image: circleci/ruby:2.6.3-node-browsers
 
-            curl http://zap:3000
+    steps:
+      - checkout
+      - setup_remote_docker:
+          docker_layer_caching: true
 
+      - run: |
+          docker ps
+          docker run --network container:hello_world appropriate/curl --retry 10 --retry-connrefused http://localhost:3000
 
+  
+workflows:
+  version: 2
+  build_and_test:
+    jobs:
+      - build
+      - test:
+          requires:
+            - build
+          filters:
+            branches:
+              only: master
 
-
-      # - run:
-      #     name: test server
-      #     command: |
-      #       curl http://localhost:3000
-
-      # run tests!
-      # - run:
-      #     name: run server
-      #     command: |
-      #       docker run -d -p 3000:3000 hello_world; timeout 10 \ 
-      #         curl --retry 10 --retry-delay 5 -v http://localhost:3000
-
-      # - run:
-      #     name: run server
-      #     command: |
-      #       docker run -d -p 3000:3000 hello_world; sleep 10 \
-      #         appropriate/curl --retry 10 --retry-delay 1 --retry-connrefused http://localhost:3000
-
-
-      # Database setup
-      # - run: bundle exec rake db:create
-      # - run: bundle exec rake db:schema:load
-
-      # run tests!
-
-      # - run:
-      #     name: run tests
-          # command: |
-          #   mkdir /tmp/test-results
-          #   TEST_FILES="$(circleci tests glob "spec/**/*_spec.rb" | \
-          #     circleci tests split --split-by=timings)"
-
-      #       bundle exec rspec \
-      #         --format progress \
-      #         --format RspecJunitFormatter \
-      #         --out /tmp/test-results/rspec.xml \
-      #         --format progress \
-      #         $TEST_FILES
-
-      # collect reports
-      # - store_test_results:
-      #     path: /tmp/test-results
-      # - store_artifacts:
-      #     path: /tmp/test-results
-      #     destination: test-results
