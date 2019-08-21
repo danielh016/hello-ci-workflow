@@ -18,33 +18,33 @@ jobs:
       - setup_remote_docker:
           docker_layer_caching: true
 
-      # Download and cache dependencies
-      - restore_cache:
-          keys:
-            - v1-dependencies-{{ checksum "Gemfile.lock" }}
-            # fallback to using the latest cache if no exact match is found
-            - v1-dependencies-
+      # # Download and cache dependencies
+      # - restore_cache:
+      #     keys:
+      #       - v1-dependencies-{{ checksum "Gemfile.lock" }}
+      #       # fallback to using the latest cache if no exact match is found
+      #       - v1-dependencies-
 
-      - run:
-          name: install dependencies
-          command: |
-            bundle install --jobs=4 --retry=3 --path vendor/bundle
+      # - run:
+      #     name: install dependencies
+      #     command: |
+      #       bundle install --jobs=4 --retry=3 --path vendor/bundle
 
-      - save_cache:
-          paths:
-            - ./vendor/bundle
-          key: v1-dependencies-{{ checksum "Gemfile.lock" }}
+      # - save_cache:
+      #     paths:
+      #       - ./vendor/bundle
+      #     key: v1-dependencies-{{ checksum "Gemfile.lock" }}
 
-      - run:
-          name: build docker
-          command: |
-            docker build -t hello_world .
+      # - run:
+      #     name: build docker
+      #     command: |
+      #       docker build -t hello_world .
 
-      - run:
-          name: "Start Service and Check That it’s Running"
-          command: |
-            docker run -d --name hello_world hello_world; sleep 10;
-            docker exec hello_world curl --retry 2 --retry-connrefused http://localhost:3000
+      # - run:
+      #     name: "Start Service and Check That it’s Running"
+      #     command: |
+      #       docker run -d --name hello_world hello_world; sleep 10;
+      #       docker exec hello_world curl --retry 2 --retry-connrefused http://localhost:3000
 
 
   deploy:
@@ -61,6 +61,12 @@ jobs:
       # - aws-cli/configure:
       #     aws-access-key-id: "$AWS_ACCESS_KEY_ID"
       #     aws-region: "$AWS_DEFAULT_REGION"
+      - run:
+          name: Install dependencies
+          command: |
+            apk add --no-cache py-pip=9.0.0-r1
+            pip install awscli==1.11.76
+      
       - run:
           command: |
             DOCKER_IMAGE='hello_world'
