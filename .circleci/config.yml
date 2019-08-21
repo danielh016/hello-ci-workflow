@@ -46,28 +46,10 @@ jobs:
             docker run -d --name hello_world hello_world; sleep 10;
             docker exec hello_world curl --retry 2 --retry-connrefused http://localhost:3000
 
-
-  deploy:
-    docker:
-      - image: circleci/python:3.6.1
-    environment:
-      AWS_DEFAULT_OUTPUT: json
-    steps:
-      - checkout
-      - setup_remote_docker
-      # - attach_workspace:
-      #     at: workspace
       - aws-cli/install
-      # - aws-cli/configure:
-      #     aws-access-key-id: "$AWS_ACCESS_KEY_ID"
-      #     aws-region: "$AWS_DEFAULT_REGION"
-      # - run:
-      #     name: Install dependencies
-      #     command: |
-      #       pip install --upgrade pip
-      #       pip install awscli==1.11.76
 
       - run:
+          name: "Deploy to ECR"
           command: |
             DOCKER_IMAGE='hello_world'
 
@@ -79,13 +61,45 @@ jobs:
             docker tag hello_world $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/$DOCKER_IMAGE
             docker push $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/$DOCKER_IMAGE
 
+  # deploy:
+  #   docker:
+  #     - image: circleci/python:3.6.1
+  #   environment:
+  #     AWS_DEFAULT_OUTPUT: json
+  #   steps:
+  #     - checkout
+  #     - setup_remote_docker
+  #     # - attach_workspace:
+  #     #     at: workspace
+  #     - aws-cli/install
+  #     # - aws-cli/configure:
+  #     #     aws-access-key-id: "$AWS_ACCESS_KEY_ID"
+  #     #     aws-region: "$AWS_DEFAULT_REGION"
+  #     # - run:
+  #     #     name: Install dependencies
+  #     #     command: |
+  #     #       pip install --upgrade pip
+  #     #       pip install awscli==1.11.76
+
+  #     - run:
+  #         command: |
+  #           DOCKER_IMAGE='hello_world'
+
+  #           aws configure set region $AWS_DEFAULT_REGION
+  #           aws configure set aws_access_key_id $AWS_ACCESS_KEY_ID
+  #           aws configure set aws_secret_access_key $AWS_SECRET_ACCESS_KEY
+
+  #           # Tag and push docker image
+  #           docker tag hello_world $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/$DOCKER_IMAGE
+  #           docker push $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/$DOCKER_IMAGE
+
             
 
-workflows:
-  version: 2.1
-  build-deploy:
-    jobs:
-      - build
-      - deploy:
-          requires:
-            - build
+# workflows:
+#   version: 2.1
+#   build-deploy:
+#     jobs:
+#       - build
+#       - deploy:
+#           requires:
+#             - build
