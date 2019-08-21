@@ -52,7 +52,7 @@ jobs:
       - run:
           name: run server
           command: |
-            docker run -d -p 3000:3000 hello_world; \
+            docker run --env HTTP_PROXY="http://127.0.0.1:3000" -d -p 3000:3000 hello_world; \
               sleep 10; curl http://localhost:3000
 
       # - run:
