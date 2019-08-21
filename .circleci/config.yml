@@ -50,17 +50,16 @@ jobs:
           command: |
             docker build -t hello_world .
 
-      - run:
-          name: run server
-          command: |
-            docker run --env HTTP_PROXY="http://127.0.0.1:3000" -d -p 3000:3000 hello_world; \
-              sleep 10; curl http://localhost:3000
-
       # - run:
       #     name: run server
       #     command: |
-      #       docker run -d -p 3000:3000 hello_world --env HTTP_PROXY="http://127.0.0.1:3000"; \
+      #       docker run --env HTTP_PROXY="http://127.0.0.1:3000" -d -p 3000:3000 hello_world; \
       #         sleep 10; curl http://localhost:3000
+
+      - run:
+          name: run server
+          command: |
+            docker run -d -p 3000:3000 hello_world;
 
       # - run:
       #     name: test server
