@@ -61,11 +61,15 @@ jobs:
       #     command: |
       #       docker run -d -p 3000:3000 hello_world;
 
-      - run:
-          name: "Start Service and Check That it’s Running"
-          command: |
-            docker run -d --name hello_world hello_world
-            docker exec hello_world curl --retry 10 --retry-connrefused http://localhost:3000
+      # - run:
+      #     name: "Start Service and Check That it’s Running"
+      #     command: |
+      #       docker run -d --name hello_world hello_world
+      #       docker exec hello_world curl --retry 10 --retry-connrefused http://localhost:3000
+
+      - run: |
+          docker run -d --name hello_world hello_world
+          docker run --network container:hello_world appropriate/curl --retry 10 --retry-connrefused http://localhost:3000
 
       # - run:
       #     name: test server
