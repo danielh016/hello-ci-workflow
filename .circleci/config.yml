@@ -32,67 +32,13 @@ jobs:
             - ./vendor/bundle
           key: v1-dependencies-{{ checksum "Gemfile.lock" }}
 
-      # run tests!
-      # - run:
-      #     name: run server
-      #     command: |
-      #       docker run -d -p 3000:3000 hello_world; sleep 10; \
-      #         curl --retry 10 --retry-delay 5 -v http://localhost:3000
-      
       - run:
           name: build docker
           command: |
             docker build -t hello_world .
 
-      # - run:
-      #     name: run server
-      #     command: |
-      #       docker run --env HTTP_PROXY="http://127.0.0.1:3000" -d -p 3000:3000 hello_world; \
-      #         sleep 10; curl http://localhost:3000
-
-      # - run:
-      #     name: run server
-      #     command: |
-      #       docker run -d -p 3000:3000 hello_world;
-
       - run:
           name: "Start Service and Check That it’s Running"
           command: |
-            docker run -d --name hello_world hello_world;
-            sleep 10;
-            docker ps
-            docker images
+            docker run -d --name hello_world hello_world; sleep 10;
             docker exec hello_world curl --retry 2 --retry-connrefused http://localhost:3000
-
-      # - run: |
-      #     docker run -d --name hello_world hello_world
-      #     docker ps
-      #     docker run --network container:hello_world appropriate/curl --retry 10 --retry-connrefused http://localhost:3000
-
-      # - run: |
-      #     docker-compose up -d
-      #     docker ps
-      #     docker run --network container:hello_world_app appropriate/curl --retry 10 --retry-connrefused http://localhost:3000
-
-  # test:
-  #   docker:
-  #     - image: circleci/ruby:2.6.3-node-browsers
-
-  #   steps:
-  #     - checkout
-  #     - setup_remote_docker:
-  #         docker_layer_caching: true
-
-  #     - run: |
-  #         docker ps
-  #         docker run --network container:hello_world appropriate/curl --retry 10 --retry-connrefused http://localhost:3000
-
-  
-# workflows:
-#   version: 2
-#   build_and_test:
-#     jobs:
-#       - build
-#       - test:
-#           requires:
-#             - build
