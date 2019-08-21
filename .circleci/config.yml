@@ -58,11 +58,11 @@ jobs:
       - run:
           name: "Start Service and Check That it’s Running"
           command: |
-            docker run -d --name hello_world hello_world; \
-            sleep 10; \
-            docker ps \
-            docker images \
-            curl http://google.com \
+            docker run -d --name hello_world hello_world;
+            sleep 10;
+            docker ps
+            docker images
+            curl http://google.com
             docker exec hello_world curl --retry 10 --retry-connrefused http://localhost:3000
 
       # - run: |
