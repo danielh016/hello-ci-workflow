@@ -56,10 +56,16 @@ jobs:
       #       docker run --env HTTP_PROXY="http://127.0.0.1:3000" -d -p 3000:3000 hello_world; \
       #         sleep 10; curl http://localhost:3000
 
+      # - run:
+      #     name: run server
+      #     command: |
+      #       docker run -d -p 3000:3000 hello_world;
+
       - run:
-          name: run server
+          name: "Start Service and Check That it’s Running"
           command: |
-            docker run -d -p 3000:3000 hello_world;
+            docker run -d --name hello_world hello_world
+            docker exec hello_world curl --retry 10 --retry-connrefused http://localhost:3000
 
       # - run:
       #     name: test server
