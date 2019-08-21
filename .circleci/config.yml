@@ -52,7 +52,7 @@ jobs:
       - run:
           name: run server
           command: |
-            docker run -d -p 3000:3000 hello_world; \
+            docker run -d -p 3000:3000 hello_world; sleep 10;\
               curl http://localhost:3000
 
       # - run:
