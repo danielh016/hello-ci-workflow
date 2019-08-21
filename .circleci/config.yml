@@ -69,6 +69,7 @@ jobs:
 
       - run: |
           docker run -d --name hello_world hello_world
+          docker ps
           docker run --network container:hello_world appropriate/curl --retry 10 --retry-connrefused http://localhost:3000
 
       # - run:
