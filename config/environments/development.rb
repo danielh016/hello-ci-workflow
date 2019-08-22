@@ -6,6 +6,14 @@ Rails.application.configure do
   # since you don't have to restart the web server when you make code changes.
   config.cache_classes = false
 
+  # Whitelist one hostname
+  config.hosts << "env-development.52vzuengn9.us-west-2.elasticbeanstalk.com"
+  # Rails.application.config.hosts << "env-development.52vzuengn9.us-west-2.elasticbeanstalk.com"
+  # Rails.application.config.hosts = nil
+  # config.hosts << "/.*\.elasticbeanstalk\.com/"
+  # config.hosts = nil
+  # config.hosts.clear
+
   # Do not eager load code on boot.
   config.eager_load = false
 
