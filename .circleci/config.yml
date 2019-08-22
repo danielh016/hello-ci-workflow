@@ -59,4 +59,10 @@ jobs:
             docker tag hello_world $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/$DOCKER_IMAGE
             docker push $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/$DOCKER_IMAGE
 
-
+      - run:
+          name: "npm install"
+          command: npm install
+          
+      - run:
+          name: "release"
+          command: npm run semantic-release || true

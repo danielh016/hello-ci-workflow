@@ -8,8 +8,23 @@
     "@rails/webpacker": "^4.0.7",
     "turbolinks": "^5.2.0"
   },
-  "version": "0.1.0",
+  "version": "0.0.0-development",
   "devDependencies": {
+    "cz-conventional-changelog": "^3.0.2",
+    "semantic-release": "^15.13.21",
     "webpack-dev-server": "^3.8.0"
+  },
+  "scripts": {
+    "semantic-release": "semantic-release",
+    "commit": "git-cz"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/RainRush/hello-ci-workflow.git"
+  },
+  "config": {
+    "commitizen": {
+      "path": "./node_modules/cz-conventional-changelog"
+    }
   }
 }
