@@ -61,17 +61,6 @@ jobs:
           name: Docker login
           command: |
             docker login -u $DOCKER_USER -p $DOCKER_PWD
-          
-      - run:
-          name: Tag and push the image
-          command: |
-            BRANCH=${CIRCLE_BRANCH//[^a-zA-Z0-9]/-}
-            IMAGE_NAME="hello_world"
-            docker pull $IMAGE_NAME:$BRANCH
-
-            VERSION=$(git describe --abbrev=0 --tags || $BRANCH)
-            docker tag $IMAGE_NAME:$BRANCH $IMAGE_NAME:$VERSION
-            docker push $IMAGE_NAME:$VERSION
 
       - aws-cli/install
 
@@ -79,6 +68,8 @@ jobs:
           name: "Deploy to ECR"
           command: |
             DOCKER_IMAGE='hello_world'
+            BRANCH=${CIRCLE_BRANCH//[^a-zA-Z0-9]/-}
+            VERSION=$(git describe --abbrev=0 --tags || $BRANCH)
 
             aws configure set region $AWS_DEFAULT_REGION
             aws configure set aws_access_key_id $AWS_ACCESS_KEY_ID
@@ -86,7 +77,9 @@ jobs:
 
             eval $(aws ecr get-login --region $AWS_DEFAULT_REGION --no-include-email)
 
+            # docker pull $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/$DOCKER_IMAGE
+
             # Tag and push docker image
-            docker tag hello_world $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/$DOCKER_IMAGE
-            docker push $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/$DOCKER_IMAGE
+            docker tag $DOCKER_IMAGE:$BRANCH $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/$DOCKER_IMAGE:$VERSION
+            docker push $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/$DOCKER_IMAGE:$VERSION
 
