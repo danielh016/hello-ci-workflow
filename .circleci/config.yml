@@ -2,6 +2,7 @@ version: 2.1
 orbs:
   aws-cli: circleci/aws-cli@0.1.13
   aws-ecr: circleci/aws-ecr@1.1.2
+  semantic-versioning: payfit/semantic-versioning@0.40.0
 jobs:
   build:
     docker:
@@ -42,6 +43,19 @@ jobs:
             docker run -d --name hello_world hello_world; sleep 10;
             docker exec hello_world curl --retry 2 --retry-connrefused http://localhost:3000
 
+      - run:
+          name: "npm install"
+          command: npm install
+
+      - run:
+          name: "release"
+          command: npm run semantic-release || true
+
+      - semantic-versioning/push-semantic-versioned-image:
+          docker_password: $DOCKER_PWD
+          docker_user: $DOCKER_USER
+          image_name: "hello_world"
+
       - aws-cli/install
 
       - run:
@@ -59,13 +73,3 @@ jobs:
             docker tag hello_world $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/$DOCKER_IMAGE
             docker push $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/$DOCKER_IMAGE
 
-            echo $CIRCLE_SHA1
-            echo $VERSION
-
-      - run:
-          name: "npm install"
-          command: npm install
-
-      - run:
-          name: "release"
-          command: npm run semantic-release || true
