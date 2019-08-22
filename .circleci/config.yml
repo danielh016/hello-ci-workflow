@@ -7,8 +7,7 @@ jobs:
     docker:
       - image: circleci/ruby:2.6.3-node-browsers
 
-    # working_directory: ~/hello_world
-    working_directory: ~/
+    working_directory: ~/hello_world
 
     steps:
       - checkout
