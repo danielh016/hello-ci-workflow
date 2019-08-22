@@ -51,11 +51,12 @@ jobs:
           name: "release"
           command: npm run semantic-release || true
 
+      - semantic-versioning/push-semantic-versioned-image
       # - semantic-versioning/push-semantic-versioned-image:
       #     docker_password: $DOCKER_PWD
       #     docker_user: $DOCKER_USER
       #     image_name: "hello_world"
-          
+
 
       - aws-cli/install
 
